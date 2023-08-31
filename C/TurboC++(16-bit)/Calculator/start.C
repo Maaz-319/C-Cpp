@@ -15,6 +15,10 @@ void calculate(){
 	}else if(operator == '-'){
 		printf("\n\tAnswer: %.2f", num_1-num_2);
 	}else if(operator == '/'){
+		if(num_2 == 0)
+			printf("\n\tCan't Divide by Zero.");
+			getch();
+			calculate();
 		printf("\n\tAnswer: %.2f", num_1/num_2);
 	}else if(operator == '*'){
 		printf("\n\tAnswer: %.2f", num_1*num_2);
@@ -24,7 +28,7 @@ void calculate(){
 	getch();
 	run_again();
 }
-run_again(){
+int run_again(){
 	char user_choice;
 	printf("\n\n\tChoose:\n\ta) Run again\n\tb) Exit\n\t\tChoice: ");
 	scanf(" %c", &user_choice);
