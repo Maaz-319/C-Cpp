@@ -68,17 +68,7 @@ void run_game(){
 		}while(game_board[player_1] != ' ');
 		game_board[player_1] = 'O';
 		// ===========================================================
-
-		game_continuity = check_game_continty(game_board);
-
-		// If the game is Eligible to move ahead, The board of game is refreshed otherwise, game ends!!
-		if(game_continuity)
-			print_the_board(game_board, player_1, 'O');
-		else
-			{
-				print_the_board(game_board, player_1, 'O');
-				break;
-			}
+		print_the_board(game_board, player_1, 'O');
 
 		// Check if a Player has won===========
 		win_check = check_win(game_board);
@@ -93,6 +83,17 @@ void run_game(){
 			exit_game('O');
 		//=====================================
 
+
+		game_continuity = check_game_continty(game_board);
+
+		// If the game is Eligible to move ahead, The board of game is refreshed otherwise, game ends!!
+		if(game_continuity)
+			print_the_board(game_board, player_1, 'O');
+		else
+			{
+				print_the_board(game_board, player_1, 'O');
+				break;
+			}
 
 
 		// Player 2 input
