@@ -19,7 +19,7 @@ void print_slowly(char source[]) {
     int arraySize = strlen(destination);  // Adjusted to use strlen for the correct size
     for (int i = 0; i < arraySize; i++) { // Adjusted the loop condition
         printf("%c", destination[i]);
-        usleep(40000);
+        usleep(1000);
     }
 
     // No need to free(destination) here because it's not used beyond this point.

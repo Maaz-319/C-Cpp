@@ -2,7 +2,6 @@
 	Code by Maaz Bin Asif
 */
 
-
 // Header Files
 #include<typeslow.h>
 #include<conio.h>
@@ -15,27 +14,42 @@ void print_the_board(char game_board[], int user_input, char player);
 int check_game_continty(char game_board[]);
 int check_win(char game_board[]);
 void exit_game(char);
+int play_again(void);
 
 
 void main(){
+	char sample_game_board[9] = {
+									'1','2','3',
+									'4','5','6',
+									'7','8','9'
+								};
+
 	// Greetings=====================================================
-	printf("\n\t\t=======================================\n");
-    printf("\t\t          Welcome to Tic Tac Toe!        \n");
-    printf("\t\t               Made by Maaz\n");
-    printf("\t\t=======================================\n\n");
-    printf("\n\n\t\t     Press any key to continue....");
+	print_slowly("\n\t\t=======================================\n");
+    print_slowly("\t\t          Welcome to Tic Tac Toe!        \n");
+    print_slowly("\t\t               Made by Maaz\n");
+    print_slowly("\t\t=======================================\n\n");
+    print_slowly("\n\n\t\t     Press any key to continue....");
     getch();
     // ==============================================================
 
     system("cls");
 
     // Rules=====================================================================
-    printf("\n\t\t| RULES |\n\n");
-    printf("\n\t> Enter the Number of Box you Wish to Play-In and Press Enter");
-    printf("\n\t> Number of Boxes Range from 1-9");
-    printf("\n\t> You can Play in One box only One Time");
-    printf("\n\t> 'O' Will Play First Turn");
-    printf("\n\n\tPress Any Key and Dive into the Game!!...");
+    print_slowly("\n\t\t| RULES |\n\n");
+    print_slowly("\n\t> Enter the Number of Box you Wish to Play-In and Press Enter.");
+    print_slowly("\n\t> You Only Get One Turn per Box.");
+    print_slowly("\n\t> 'O' Will Go First");
+    print_slowly("\n\t> Number of Boxes Range from 1-9 as Shown below...");
+    print_slowly("\n\n\tHit any Key to Dive into the Game!!...\n\n");
+    for(int i=0; i<9; i++)
+		{
+			if(!(i%3) && i>2)
+				printf("\n--------------------\n"); // Prints lines after every row
+			printf("  %c  ", sample_game_board[i]);
+			if(i==0 || i==1 || i==3 || i==4 || i==6 || i==7) // prints the middle divider
+				printf("|");
+		}
     getch();
     //===========================================================================
 
@@ -62,7 +76,7 @@ void run_game(){
 		// Player 1 Input=============================================
 		do
 		{
-			printf("\n\n\nPlayer O: ");
+			print_slowly("\n\n\nPlayer O: ");
 			scanf("%d", &player_1);
 			player_1-=1;
 		}while(game_board[player_1] != ' ');
@@ -74,10 +88,7 @@ void run_game(){
 		win_check = check_win(game_board);
 		if(win_check == 8)
 		{
-			printf("\n\n===============================================\n");
-    		printf("            Game Tied! Try Again           \n");
-    		printf("===============================================\n\n");
-    		getch();
+			exit_game('T');
     	}
 		else if(win_check == 1)
 			exit_game('O');
@@ -99,7 +110,7 @@ void run_game(){
 		// Player 2 input
 		do
 		{
-			printf("\n\n\nPlayer X: ");
+			print_slowly("\n\n\nPlayer X: ");
 			scanf("%d", &player_2);
 			player_2-=1;
 		}while(game_board[player_2] != ' ');
@@ -109,10 +120,7 @@ void run_game(){
 		win_check = check_win(game_board);
 		if(win_check == 8)
 		{
-			printf("\n\n===============================================\n");
-    		printf("            Game Tied! Try Again           \n");
-    		printf("===============================================\n\n");
-    		getch();
+			exit_game('T');
     	}
 		else if(win_check == 1)
 			exit_game('X');
@@ -123,12 +131,6 @@ void run_game(){
 // Function that draws the game board with all the requirments and updates
 void print_the_board(char game_board[], int user_input, char player)
 {
-	char sample_game_board[9] =
-							{
-								'1', '2', '3',
-								'4', '5', '6',
-								'7', '8', '9',
-							};
 	game_board[user_input] = player;
 	system("cls");
 	printf("\n\n");
@@ -175,18 +177,45 @@ int check_win(char game_board[])
 // Functions that exits the game with the status of a win or tie
 void exit_game(char symbol)
 {
-	printf("\n\n===============================================\n");
-    printf("            Congratulations!           \n");
-    printf("===============================================\n\n");
-    
-    printf("         Player %c is the ultimate champion!\n\n", symbol);
-    
-    printf("          _______   _______   _______\n");
-    printf("         |       | |       | |       |\n");
-    printf("         |   %c   | |   %c   | |   %c   |\n", symbol, symbol, symbol);
-    printf("         |_______| |_______| |_______|\n\n");
-    
-    printf("===============================================\n\n");
+	if(symbol=='T')
+	{
+		print_slowly("\n\n===============================================\n");
+    	print_slowly("            Game Tied! Try Again           \n");
+    	print_slowly("===============================================\n\n");
+	}else
+		{		
+			printf("\n\n===============================================\n");
+			printf("            Congratulations!           \n");
+			printf("===============================================\n\n");
+			printf("         Player %c is the ultimate champion!\n\n", symbol);
+			    
+			printf("          _______   _______   _______\n");
+			printf("         |       | |       | |       |\n");
+			printf("         |   %c   | |   %c   | |   %c   |\n", symbol, symbol, symbol);
+			printf("         |_______| |_______| |_______|\n\n");
+			print_slowly("===============================================\n\n");
+		}
 	getch();
+	play_again();
+}
+
+
+int play_again()
+{
+	char user_choice;
+	print_slowly("\n\n\tChoose:\n\ta) Run again\n\tb) Exit\n\t\tChoice: ");
+	scanf(" %c", &user_choice);
+	if(user_choice == 'a')
+		run_game();
+	else if(user_choice == 'b')
+	{
+		system("cls");
+		print_slowly("\n\t\t@ This game by Maaz Bin Asif @\n");
+		print_slowly("\t\tContact --> maazbinaasif@gmail.com");
+		print_slowly("\n\n\nEnter to exit....");
+		getch();
+	}
+	else
+		play_again();
 	exit(0);
 }
