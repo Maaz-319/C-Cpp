@@ -1,1 +1,0 @@
-This is a test for Notepad Program made in C language.This is a Console App.		This is Not Completed yet.		Made by MAAZ.
