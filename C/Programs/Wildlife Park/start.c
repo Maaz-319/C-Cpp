@@ -55,7 +55,7 @@ void display_info(char temp, int package_validity)
 		system("cls");
 		// printf("\n\t< Available Days >");
 		// printf("\n\t\t-> ");
-		print_slowly("\n\t\t\t< Ticket Pricing >\n\t-Type-\t\t\t\t\t\t- One Day($) -\t- Two Days($) -");
+		print_slowly("\n\t\t\t< Ticket Pricing >\n\t-Type-\t\t\t\t\t- One Day($) -\t    - Two Days($) -");
 		print_slowly("\n\t==============================================================================");
 		printf("\n\n\t1) One Adult\t\t\t\t\t%d\t\t%.1f\n\t2) One Senior\t\t\t\t\t%d\t\t%.1f\n\t3) One Child(An Adult can bring 2 Kids)\t\t%d\t\t%.1f\n\t4) Family Ticket(2 Adult, 3 Kids)\t\t%d\t\t%.1f\n\t5) Six or More People(Per Person)\t\t%d\t\t%.1f\n\n", prices_one_day[0], prices_two_days[0], prices_one_day[1], prices_two_days[1], prices_one_day[2], prices_two_days[2], prices_one_day[3], prices_two_days[3], prices_one_day[4], prices_two_days[4], prices_one_day[5], prices_two_days[5]);
 		print_slowly("\n\t==============================================================================");
