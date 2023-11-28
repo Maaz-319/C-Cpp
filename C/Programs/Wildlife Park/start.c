@@ -201,9 +201,10 @@ int calculate_price(int package_time, int package_kind, int extra_things, int nu
 	system("cls");
 	print_slowly("\n\n\t< Details >");
 	print_slowly("\n\n\tPackage Name\t\t\t\tNumber of Tickets\t\tExtra Attractions");
-	print_slowly("\n----------------------------------------------------------------------------------------------");
+	print_slowly("\n\t----------------------------------------------------------------------------------------------");
 	printf("\n\t%s\t\t\t        %d\t\t\t  %s", packages[package_kind-1], number_of_tickets, extra_attractions[extra_things-1]);
-	print_slowly("\n\nChoose: \n\t\t1 -> Confirm\n\t\t2 -> Cancel\n\t\t3 -> Modify\n\t\t4 -> Exit\n\t>");
+	print_slowly("\n\t----------------------------------------------------------------------------------------------");
+	print_slowly("\n\n\n\tChoose: \n\t\t1 -> Confirm\n\t\t2 -> Cancel\n\t\t3 -> Modify\n\t\t4 -> Exit\n\t>");
 	do{
 		scanf(" %c", &user_choice);
 	}while(user_choice<'1' || user_choice>'4');
