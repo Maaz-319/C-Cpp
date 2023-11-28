@@ -14,6 +14,7 @@ int take_input_package_type();
 int take_input_number_of_people();
 int take_input_number_of_tickets();
 void ticket_modofication();
+int determine_number_of_persons_per_ticket(int);
 
 // Global Variables
 char *packages[5] = {"One Adult", "One Senior", "One Child(2 kids per Adult)", "family ticket", "Six or More people"};
@@ -21,6 +22,7 @@ char *extra_attractions[4] = {"Lion Feeding", "Penguin Feeding", "Evening BBQ", 
 int prices_one_day[5] = {20, 16, 12, 60, 15};
 float prices_two_days[5] = {30, 24, 18, 90, 22.50};
 float extra_attractions_numbers[4] = {2.50, 2, 5, 0};
+
 
 int main(){
 	system("cls");
@@ -70,23 +72,27 @@ void take_inputs()
 	int package_validity, package_type, extras, number_of_tickets=1, number_of_tickets_for_extras=1, number_of_persons=1;
 	
 	package_type = take_input_package_type();
-	if(package_type == 5)
-		number_of_persons = take_input_number_of_people();
+	// To determine number of persons per ticket
+	number_of_persons = determine_number_of_persons_per_ticket(package_type);
 
+	// In package 5, Number of persons are not fixed so user must enter it
 	if(package_type!=5)
 		number_of_tickets = take_input_number_of_tickets();
 	
+	// Validity of package 1 or 2 days
 	do{
 		print_slowly("\n\tChoose Validity(1 or 2 day): ");
 		scanf(" %d", &package_validity);
 	}while(package_validity<1 || package_validity>2);
-	display_info('a', package_validity);
+	
+	display_info('a', package_validity); // display the extra attraction options
 
+	// Asking for extra attractions
 	do{
 		print_slowly("\n\tChoose Extras(1-4): ");
 		scanf("%d", &extras);
 	}while(extras<1 || extras>4);
-	if(package_validity == 1 && extras==3)
+	if(package_validity == 1 && extras==3) // User is not allowed to do extra attraction 3 (BBQ) on a 1 day package
 	{
 			do{
 			print_slowly("\n\tChoose Extras(1-4): ");
@@ -94,7 +100,7 @@ void take_inputs()
 		}while((extras<1 || extras>4) && extras==3);
 	}
 	
-	if(number_of_tickets>1 && extras!=4)
+	if(number_of_tickets>1 && extras!=4) // If number of tickets is > 1, Ask on how many tickets require attractions
 	{
 		do{
 			print_slowly("\n\tEnter Number of Tickets on Which You want Extra Attractions: ");
@@ -142,6 +148,19 @@ int take_input_number_of_tickets()
 }
 
 
+int determine_number_of_persons_per_ticket(int package_type)
+{
+	if(package_type == 5)
+		package_type = take_input_number_of_people();
+	else if(package_type==3)	//ticket 3 has 3 persons
+		package_type=3;
+	else if(package_type==4)	// ticket 3 has 5 persons
+		package_type=5;
+
+	return package_type;
+}
+
+
 void ticket_modofication(int package_time, int package_kind, int extra_things, int number_of_tickets, int number_of_tickets_for_extras, int number_of_persons)
 {
 	char user_input;
@@ -151,13 +170,14 @@ void ticket_modofication(int package_time, int package_kind, int extra_things, i
 	printf("\n\t=========================================");
 	printf("\n\n\tChoose:\n\n\ta) Package Type\n\tb) Number Of Tickets\n\tc) Confirm\n\t\t> ");
 	scanf(" %c", &user_input);
-	if(user_input == 'a')
+	if(user_input == 'a') // a means user wants to change ticket type
 	{
 		display_info('1', 0);
 		package_kind = take_input_package_type();
+		number_of_persons = determine_number_of_persons_per_ticket(package_kind);
 		calculate_price(package_time, package_kind, extra_things, number_of_tickets, number_of_tickets_for_extras, number_of_persons);
 	}
-	else if(user_input == 'b')
+	else if(user_input == 'b') // b means user wants to change no of tickets
 	{
 		number_of_tickets = take_input_number_of_tickets();
 		calculate_price(package_time, package_kind, extra_things, number_of_tickets, number_of_tickets_for_extras, number_of_persons);
@@ -172,11 +192,12 @@ int calculate_price(int package_time, int package_kind, int extra_things, int nu
 	float total_cost=0;
 	char user_choice;
 	
-	if(package_time == 1)
-		total_cost = (prices_one_day[package_kind-1]*number_of_tickets)*number_of_persons + extra_attractions_numbers[extra_things-1]*number_of_tickets_for_extras;
-	else
-		total_cost = (prices_two_days[package_kind-1]*number_of_tickets)*number_of_persons + extra_attractions_numbers[extra_things-1]*number_of_tickets_for_extras;
+	if(package_time == 1) // Price for 1 day
+		total_cost = (prices_one_day[package_kind-1]*number_of_tickets) + extra_attractions_numbers[extra_things-1]*number_of_tickets_for_extras*number_of_persons;
+	else 				// Price for two days
+		total_cost = (prices_two_days[package_kind-1]*number_of_tickets) + extra_attractions_numbers[extra_things-1]*number_of_tickets_for_extras*number_of_persons;
 
+	// ---------------------------Asking user to confirm the ticket----------------------------------------------------------
 	system("cls");
 	print_slowly("\n\n\t< Details >");
 	print_slowly("\n\n\tPackage Name\t\t\t\tNumber of Tickets\t\tExtra Attractions");
@@ -193,20 +214,26 @@ int calculate_price(int package_time, int package_kind, int extra_things, int nu
 	else if(user_choice == '3')
 		ticket_modofication(package_time, package_kind, extra_things, number_of_tickets, number_of_tickets_for_extras, number_of_persons);
 	return 0;
+	// -----------------------------------------------------------------------------------------------------------------------
 }
 
 
 void display_results(int package_time, int package_kind, int extra_things, float total_cost, int number_of_tickets)
 {
 	int ticket_number;
+	// -----------------------Generate Random Number for Ticket Number------------------------------------
 	srand ( time(NULL) );
 	ticket_number = rand();
+	// ----------------------Store Random Number in ticket_number-----------------------------------------
+	
 	system("cls");
 	print_slowly("\n\t------------------------------------------");
 	print_slowly("\n\t\tYour Ticket Has been Confirmed");
 	print_slowly("\n\t------------------------------------------");
 	printf("\n\nPress Enter to Continue...");
 	getch();
+
+	// ----------------------Displaying the Confirmed Ticket-------------------------
 	system("cls");
 	print_slowly("\n\t==================================");
 	printf("\n\t\tTICKET No. %d", ticket_number);
@@ -218,6 +245,8 @@ void display_results(int package_time, int package_kind, int extra_things, float
 	print_slowly("\n\t------------------------------------------------------");
 	printf("\n\n\tTotal Cost:        \t$%.1f", total_cost);
 	getch();
+	//--------------------------------------------------------------------------------
+
 	run_again();
 }
 
