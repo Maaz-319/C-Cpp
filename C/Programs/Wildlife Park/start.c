@@ -4,7 +4,7 @@
 #include<conio.h>
 #include<time.h>
 #include<typeslow.h>
-// #include<string.h>
+#include<string.h>
 // #include<math.h>
 // ==========================
 
@@ -17,6 +17,7 @@ void take_inputs(); // handle all types of input
 void store_ticket_data(int, int, int, int);
 void read_ticket_data(); // Reads data from a text file
 void inital_choice(); // Choose to book ticket or found existing
+void flush_input_buffer(); // Flush the input buffer to remove \n
 // ---------------------------Input Functions--------------------------------------------
 int take_input_package_type(); // handle all types if inputs
 int take_input_day_for_visit(); // ipnut and stores day for the visit
@@ -29,8 +30,8 @@ void ticket_modofication(); // Handle the ticket modifications if user wants to 
 // ===================================================================================================================
 
 // Global Variables =======================================================================================================
-char *packages[5] = {"One Adult", "One Senior", "One Child(2 kids per Adult)", "family ticket", "Six or More people"};
-char *extra_attractions[4] = {"Lion Feeding", "Penguin Feeding", "Evening BBQ", "None"};
+char *packages[5] = {"One_Adult", "One_Senior", "One_Child(2_kids_per_Adult)", "family_ticket", "Six_or_More_people"};
+char *extra_attractions[4] = {"Lion_Feeding", "Penguin_Feeding", "Evening_BBQ", "None"};
 char *days[7] = {"Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday"};
 int prices_one_day[5] = {20, 16, 12, 60, 15};
 float prices_two_days[5] = {30, 24, 18, 90, 22.50};
@@ -330,128 +331,66 @@ void run_again()
 
 void store_ticket_data(int ticket_number, int ticket_type, int extras, int available_day)
 {
-	FILE *data_file;
+	FILE *data_file = fopen("data.csv", "a+");
 	char ticket_number_string[5];
-
-	data_file = fopen("data.txt", "a+");
 	
 	itoa(ticket_number, ticket_number_string, 10);
-	fputs(ticket_number_string, data_file);
-
-	fputs("!", data_file);
-	fputs(packages[ticket_type-1], data_file);
-	fputs("!", data_file);
-	fputs(extra_attractions[extras-1], data_file);
-	fputs("!", data_file);
-	fputs(days[available_day-1], data_file);
-	fprintf(data_file, "\n");
+	fprintf(data_file, "%s, %s, %s, %s\n", ticket_number_string, packages[ticket_type-1], extra_attractions[extras-1], days[available_day-1]);
 	fclose(data_file);
 }
 
 
-// void read_ticket_data()
-// {
-// 	FILE *data_file;
-// 	int MAX_LINE_SIZE = 50;
-//     char line[MAX_LINE_SIZE];
-//     int current_number, search_number;
-//     char component1[MAX_LINE_SIZE], component2[MAX_LINE_SIZE], component3[MAX_LINE_SIZE], component4[MAX_LINE_SIZE];
-	
-// 	system("cls");
-// 	print_slowly("\n\tEnter the ticket Number: ");
-//     scanf("%d", &search_number);
-//     system("cls");
-	
-// 	data_file = fopen("data.txt", "r");
-	
-// 	print_slowly("\n\n\tNumber\tType\t\tExtras\tDay\n");
-// 	print_slowly("-----------------------------------------------------------------------------\n");
-	
-// 	while(1)
-// 	{
-// 		if(fgets(line, sizeof(line), data_file) != NULL)
-// 		{
-// 			if (sscanf(line, "%d!%[^!]!%[^!]!%[^\n]", &current_number, component1, component2, component3) == 4)
-// 			{
-// 				// Check if the current_number matches the user input
-// 				if (current_number == search_number)
-// 				{
-// 					// Print or process the components as needed
-// 					printf("\t%d\t%s\t%s\t%s\n", current_number, component1, component2, component3);
-// 				}else
-// 				{
-// 					print_slowly("\n\n\t\t!!NOT FOUND!!");
-// 					print_slowly("\n\nPress Enter...");
-// 					getch();
-// 					system("cls");
-// 					inital_choice();
-// 				}
-// 			}
-// 		}else
-// 		{
-// 			break;
-// 		}
-// 	}
-// 	run_again();
-// 	// while((ch = getc(data_file)) != EOF)
-// 	// {
-// 	// 	if(ch == '!')
-// 	// 		printf("\t\t");
-// 	// 	else
-// 	// 		printf("%c", ch);
-// 	// }
-// }
-void read_ticket_data() {
-    FILE *data_file;
-    int MAX_LINE_SIZE = 50;
-    char line[MAX_LINE_SIZE];
-    int current_number, search_number;
-    char component1[MAX_LINE_SIZE], component2[MAX_LINE_SIZE], component3[MAX_LINE_SIZE];
-
-    system("cls");
-    print_slowly("\n\tEnter the ticket Number: ");
-    scanf("%d", &search_number);
-    system("cls");
-
-    data_file = fopen("data.txt", "r");
-
-    if (data_file == NULL) {
-        print_slowly("\n\tError opening the file.");
-        getch();
-        system("cls");
-        inital_choice();
+void read_ticket_data()
+{
+	FILE *data_file = fopen("data.csv", "r");
+	char buffer[1024];
+	int ticket_number, found=0;
+	char ticket_number_string[6];
+	system("cls");
+	printf("\n\tEnter Ticket number: ");
+	scanf("%d", &ticket_number);
+	itoa(ticket_number, ticket_number_string, 10);
+	// snprintf(ticket_number_string, sizeof(ticket_number_string), "%s%d", "\n", ticket_number);
+	// printf("%s\n", ticket_number_string);
+	// flush_input_buffer();
+	while (fgets(buffer, sizeof(buffer), data_file) != NULL)
+    {
+        char *value = strtok(buffer, ",");
+        
+        if (value != NULL && strcmp(value, ticket_number_string) == 0)
+        {
+        	found=1;
+        	system("cls");
+			printf("\n\t=============================\n");
+			printf("\t\tSearch Ticket");
+			printf("\n\t=============================\n\n\n\n");
+			printf("\tNumber\t\t\tTicket Type\t\t\tExtras\t\t\tDay");
+			printf("\n--------------------------------------------------------------------------------------------\n\t");
+            while(value)
+			{
+				printf("%s\t\t", value);
+				value = strtok(NULL, " ,");
+				if(value!=NULL && (strcmp(value, packages[0]) == 0 || strcmp(value, packages[1]) == 0 || strcmp(value, packages[3]) == 0))
+					printf("\t\t");
+        	}	
+    	}
     }
-
-    print_slowly("\n\n\tNumber\tType\t\tExtras\tDay\n");
-    print_slowly("-----------------------------------------------------------------------------\n");
-
-    int found = 0;  // Flag to indicate if the ticket is found
-
-    while (fgets(line, sizeof(line), data_file) != NULL) {
-        if (sscanf(line, "%d!%[^!]!%[^!]!%[^\n]", &current_number, component1, component2, component3) == 4) {
-            if (current_number == search_number) {
-                // Ticket found, print the details
-                printf("\t%d\t%s\t%s\t%s\n", current_number, component1, component2, component3);
-                found = 1;
-                break;  // Ticket found, no need to continue searching
-            }
-        }
+    if(!found)
+    {
+		system("cls");
+		printf("\n\n\tNOT FOUND\n\n");
     }
-
-    // Close the file
-    fclose(data_file);
-
-    if (!found) {
-        // Ticket not found, display a message
-        print_slowly("\n\n\t\t!!NOT FOUND!!");
-        print_slowly("\n\nPress Enter...");
-        getch();
-        system("cls");
-        inital_choice();
-    }
-
-    run_again();
+	printf("\n\n\n");
+	getch();
+	inital_choice();
 }
+
+
+void flush_input_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 
 
 void inital_choice()
