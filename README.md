@@ -2,6 +2,11 @@
 
 Welcome to the C-Cpp Programs repository! This collection contains a variety of C and C++ programs that demonstrate various concepts and algorithms.
 
+
+# Profile
+github.com/maaz-319
+
+
 ## Table of Contents
 
 - [Programs](#programs)
@@ -16,11 +21,11 @@ Here are some of the programs included in this repository:
 - Hello World
 - Simple Calculator
 - File I/O
-- Linked List
-- Binary Tree
-- Sorting Algorithms
-- Searching Algorithms
-- Game of Life
+- Even Odd Identifier
+- GCD Calculator
+- Tic Tac Toe (CLI)
+- Ticketing System
+- Vowal Identifier
 
 ## Installation
 
@@ -33,11 +38,11 @@ To compile and run these programs, you'll need a C/C++ compiler installed on you
    ```bash
    cd C-Cpp
 3. Contributing
-We welcome contributions! If you have a useful C or C++ program you'd like to add, please fork the repository, make your changes, and submit a pull request. Ensure your code follows the style guidelines and includes appropriate documentation.
-
-Enjoy coding and exploring these C and C++ programs! If you have any questions or feedback, feel free to open an issue in the repository.
+   We welcome contributions! If you have a useful C or C++ program you'd like to add, please check the repository, analyze it, and create issues. Ensure your code follows the style         guidelines and includes appropriate documentation.
+   
+   Enjoy coding and exploring these C and C++ programs! If you have any questions or feedback, feel free to open an issue in the repository.
 4. Usage
   ```bash
-  cd HelloWorld
-  gcc hello_world.c -o hello_world
-  ./hello_world
+   cd HelloWorld
+   gcc hello_world.c -o hello_world
+   ./hello_world
